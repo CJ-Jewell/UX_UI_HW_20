@@ -7,16 +7,20 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
-    <script src="JS/index.js"></script>
+    <script src="js/gallery.js"></script>
+    <script type="text/javascript" src="js/d3.js"> </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
     <!--  Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="Fonts/VioletSans-Regular.ttf">
+    <link rel="stylesheet" href="fonts/VioletSans-Regular.ttf">
 
 
 </head>
@@ -24,7 +28,279 @@
 <!-----------------         body         -------------------->
 
 <body>
-    <!------- header-->
+    <!------- header nav -->
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Work</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Resume</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Contact</a>
+        </li>
+      </ul>
+
+      <!-- jumbotron -->
+      <div class="jumbotron">
+        <div class="container text-left text-lg-left">
+          
+          <div class="row">
+            <div class="col-lg-8">
+                <h1 class="display-4">Data Viz Gallery</h1>
+                <p class="lead">Let's have some fun with data.</p>
+            </div>
+            
+            <div class="col-lg-4 align-items-center d-flex">
+              <img src="images/Logo.png" alt="" class="img-fluid">
+            </div>
+          
+        </div>
+      
+        </div>
+      </div>
+
+      <!-- Gallery -->
+<div class="row">
+    <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+      <img
+        src="images/Sleepy.png"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Boat on Calm Water"
+      />
+  
+      <img
+        src="images/Fluourescent pollen.png"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Wintry Mountain Landscape"
+      />
+    </div>
+  
+    <div class="col-lg-4 mb-4 mb-lg-0">
+      <img
+        src="images/Awake.png"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Mountains in the Clouds"
+      />
+  
+      <img
+        src="images/Style Blue.png"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Boat on Calm Water"
+      />
+    </div>
+  
+    <div class="col-lg-4 mb-4 mb-lg-0">
+      <img
+        src="images/Flower display.png"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Waves at Sea"
+      />
+  
+      <img
+        src="images/Ecuador View.png"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Yosemite National Park"
+      />
+    </div>
+  </div>
+  <!-- Gallery -->
+
+  <!--D3-->
+  <div id="diag" class="offset-by-three ten columns">
+            
+            
+    <script src = "js/d3-tip.js"></script>
+    <script type="text/javascript">
+        //Width and height for SVG
+
+        var w = 500;
+        var h = 400;
+
+        //Original data
+        var dataset = {
+            nodes: [
+                { name: "<em>S. lycopersicoides</em>" , group: 7 , value: 8 }, //0
+                { name: "MRCA" , group: 2 , value: 5 }, //1
+                { name: "" , group: 2 , value: 5 }, //2
+                { name: "<em>S. cheesmaniae</em>" , group: 3 , value: 8 }, //3
+                { name: "<em>S. galapagense</em>" , group: 3 , value: 8 }, //4
+                { name: "" , group: 2 , value: 5 }, //5
+                { name: "Esculentum group" , group: 2 , value: 5 }, //6
+                { name: "<em>S. arcanum</em>" , group: 4 , value: 8 }, //7
+                { name: "<em>S. chmielewskii</em>" , group: 4 , value: 8 }, //8
+                { name: "<em>S. neorickii</em>" , group: 4 , value: 8 }, //9
+                { name: "" , group: 2 , value: 5 }, //10
+                { name: "Arcanum Group" , group: 2 , value: 5 }, //11
+                { name: "Esculentum and Arcanum group" , group: 2 , value: 5 }, //12
+                { name: "<em>S. corneliomulleri</em>" , group: 5 , value: 8 }, //13
+                { name: "<em>S. hualaysense</em>" , group: 5 , value: 8 }, //14
+                { name: "<em>S. peruvianum</em>" , group: 5 , value: 8 }, //15
+                { name: "<em>S. chilense</em>" , group: 5 , value: 8 }, //16
+                { name: "" , group: 2 , value: 5 }, //17
+                { name: "Peruvianum Group" , group: 2 , value: 5 }, //18
+                { name: "" , group: 2 , value: 5 }, //19
+                { name: "<em>S. habrochaites</em>" , group: 6 , value: 8 }, //20
+                { name: "<em>S. pennellii</em>" , group: 6 , value: 8 }, //21
+                { name: "Hirsutum group" , group: 2 , value: 5 }, //22
+                { name: "<em>Solanum</em> sect. <em>Lycopersicon</em>" , group: 2 , value: 7 }, //23
+                { name: "<em>S. lycopersicum</em>" , group: 1 , value: 8 }, //24
+                { name: "<em>S. pimpinellifolium</em>" , group: 1 , value: 8 }, //25
+
+            ],
+            edges: [
+                { source: 24, target: 2 }, //lyc to lyc-pim
+                { source: 25, target: 2 }, //pim to lyc-pim
+                { source: 3, target: 5 }, //che to che-gal
+                { source: 4, target: 5 }, //gal to che-gal
+                { source: 5, target: 6 }, //che-gal to red
+                { source: 2, target: 6 }, //lyc-pim to red
+                { source: 8, target: 10 }, //chm to chm-neo 
+                { source: 9, target: 10 }, //neo to chm-neo
+                { source: 7, target: 11 }, //arc to arc group
+                { source: 10, target: 11 }, //chm-neo to arc group
+                { source: 11, target: 12 }, //arc group to upper half
+                { source: 6, target: 12 }, //red fruited to upper half
+                { source: 13, target: 17 }, //cor to co-hu-per
+                { source: 14, target: 17 }, //hua to co-hu-per
+                { source: 15, target: 17 }, //per to co-hu-per
+                { source: 16, target: 18 }, //chil to mountain
+                { source: 17, target: 18 }, //co-hu-per to mountain
+                { source: 18, target: 19 }, //mountain to red+mount
+                { source: 12, target: 19 }, //red to red+mount
+                { source: 20, target: 22 }, //hab to pen-hab
+                { source: 21, target: 22 }, //pen to pen-hab
+                { source: 22, target: 23 }, //pen-hab to Solanum
+                { source: 19, target: 23 }, //red+mount to Solanum
+                { source: 0, target: 1 }, //lyps to MRCA
+                { source: 23, target: 1 }, //Solanum to MRCA
+            ]
+        };
+
+        //Initialize a default force layout, using the nodes and edges in dataset
+        var force = d3.layout.force()
+                             .nodes(dataset.nodes)
+                             .links(dataset.edges)
+                             .size([w, h])
+                             .linkDistance([50])
+                             .charge([-100])
+                             .start();
+
+        var colors = d3.scale.category20();
+
+        //Create SVG element, append SVG to body of the html page. Assign this SVG as an object to svg
+        var svg = d3.select("#diag")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+        
+        svg.append("rect")
+                .attr("width", w)
+                .attr("height", h)
+                .attr("fill", "AliceBlue");
+        
+        //Create edges as lines
+        var edges = svg.selectAll("line")
+            .data(dataset.edges)
+            .enter()
+            .append("line")
+            .style("stroke", "#ccc")
+            .style("stroke-width", 1);
+        
+        
+        //Set up tooltip
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-2, 0])
+            .html(function (d) {
+                return d.name + "</span>";
+        })
+        svg.call(tip);
+        
+        
+        //Create nodes as circles
+        var nodes = svg.selectAll("circle")
+            .data(dataset.nodes)
+            .enter()
+            .append("circle")
+            .attr("r", function(d) { return d.value ; })
+            .style("fill", function(d, i) {
+                return colors(d.group);
+            })
+            .call(force.drag)
+            .on("mouseover", tip.show)
+            .on("mouseout", tip.hide);
+
+        
+        //Every time the simulation "ticks", this will be called
+        force.on("tick", function() {
+
+            edges.attr("x1", function(d) { return d.source.x; })
+                 .attr("y1", function(d) { return d.source.y; })
+                 .attr("x2", function(d) { return d.target.x; })
+                 .attr("y2", function(d) { return d.target.y; });
+        
+            nodes.attr("cx", function(d) { return d.x; })
+                 .attr("cy", function(d) { return d.y; });
+
+        });
+
+    </script>
+    
+    <svg width="500" height="400"><rect width="500" height="400" fill="AliceBlue"></rect><line x1="277.29444480434944" y1="79.0867139724848" x2="323.6027016948434" y2="98.7597336602662" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="365.87952207839834" y1="127.45956057152009" x2="323.6027016948434" y2="98.7597336602662" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="348.4347103856082" y1="229.5824613162942" x2="357.5674386968331" y2="179.36415347142474" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="385.8730207652812" y1="222.36218819836435" x2="357.5674386968331" y2="179.36415347142474" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="357.5674386968331" y1="179.36415347142474" x2="316.4250474083165" y2="148.78667460589693" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="323.6027016948434" y1="98.7597336602662" x2="316.4250474083165" y2="148.78667460589693" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="268.46640860956785" y1="317.02780028924616" x2="271.2754637051935" y2="265.53912931345593" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="311.75381288811366" y1="299.4369393150206" x2="271.2754637051935" y2="265.53912931345593" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="314.9571456839929" y1="252.55268122888108" x2="280.6831994969153" y2="214.51193414252484" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="271.2754637051935" y1="265.53912931345593" x2="280.6831994969153" y2="214.51193414252484" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="280.6831994969153" y1="214.51193414252484" x2="269.498031863199" y2="164.62161475430804" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="316.4250474083165" y1="148.78667460589693" x2="269.498031863199" y2="164.62161475430804" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="124.42963288355202" y1="168.89589496213136" x2="150.86179310954236" y2="125.04450761304606" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="199.66525797658383" y1="105.44788902441053" x2="150.86179310954236" y2="125.04450761304606" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="176.58765954924385" y1="79.82198147407554" x2="150.86179310954236" y2="125.04450761304606" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="227.16539460417778" y1="135.9191893179531" x2="183.05821412769794" y2="164.50002329683346" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="150.86179310954236" y1="125.04450761304606" x2="183.05821412769794" y2="164.50002329683346" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="183.05821412769794" y1="164.50002329683346" x2="226.30070981930098" y2="190.98506972035625" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="269.498031863199" y1="164.62161475430804" x2="226.30070981930098" y2="190.98506972035625" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="209.922896317074" y1="336.79071241101894" x2="215.90982144799125" y2="287.7041362192322" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="179.84020592037447" y1="249.71553926369114" x2="215.90982144799125" y2="287.7041362192322" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="215.90982144799125" y1="287.7041362192322" x2="205.7606894136961" y2="237.4693429494551" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="226.30070981930098" y1="190.98506972035625" x2="205.7606894136961" y2="237.4693429494551" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="124.68796675292748" y1="236.43076049326868" x2="162.19731333708086" y2="272.1964396244361" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="205.7606894136961" y1="237.4693429494551" x2="162.19731333708086" y2="272.1964396244361" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><circle r="8" style="fill: rgb(31, 119, 180);" cx="124.68796675292748" cy="236.43076049326868"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="162.19731333708086" cy="272.1964396244361"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="323.6027016948434" cy="98.7597336602662"></circle><circle r="8" style="fill: rgb(255, 127, 14);" cx="348.4347103856082" cy="229.5824613162942"></circle><circle r="8" style="fill: rgb(255, 127, 14);" cx="385.8730207652812" cy="222.36218819836435"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="357.5674386968331" cy="179.36415347142474"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="316.4250474083165" cy="148.78667460589693"></circle><circle r="8" style="fill: rgb(255, 187, 120);" cx="314.9571456839929" cy="252.55268122888108"></circle><circle r="8" style="fill: rgb(255, 187, 120);" cx="268.46640860956785" cy="317.02780028924616"></circle><circle r="8" style="fill: rgb(255, 187, 120);" cx="311.75381288811366" cy="299.4369393150206"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="271.2754637051935" cy="265.53912931345593"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="280.6831994969153" cy="214.51193414252484"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="269.498031863199" cy="164.62161475430804"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="124.42963288355202" cy="168.89589496213136"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="199.66525797658383" cy="105.44788902441053"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="176.58765954924385" cy="79.82198147407554"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="227.16539460417778" cy="135.9191893179531"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="150.86179310954236" cy="125.04450761304606"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="183.05821412769794" cy="164.50002329683346"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="226.30070981930098" cy="190.98506972035625"></circle><circle r="8" style="fill: rgb(152, 223, 138);" cx="209.922896317074" cy="336.79071241101894"></circle><circle r="8" style="fill: rgb(152, 223, 138);" cx="179.84020592037447" cy="249.71553926369114"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="215.90982144799125" cy="287.7041362192322"></circle><circle r="7" style="fill: rgb(174, 199, 232);" cx="205.7606894136961" cy="237.4693429494551"></circle><circle r="8" style="fill: rgb(214, 39, 40);" cx="277.29444480434944" cy="79.0867139724848"></circle><circle r="8" style="fill: rgb(214, 39, 40);" cx="365.87952207839834" cy="127.45956057152009"></circle></svg>
+    </div>
+
+    <div class="d3-tip" style="position: absolute; opacity: 0;"></div>
+  <!-- Data -->
+  <div class="row">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+      <div class="card">
+        <img src="images/BioClim.png" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h6>RSHINY</h6>
+          <h5 class="card-title">BioClim Data</h5>
+          <p class="card-text">Interactive DataTable to download BioClim data for the wild tomato clade</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        <div class="card">
+          <img src="images/BioClim.png" class="card-img-top" alt="...">
+          <div class="card-body">
+              <h6>HTML</h6>
+            <h5 class="card-title">Map of Wild Tomatoes</h5>
+            <p class="card-text">Interactive map of wild tomato populations using Mapbox. See code on GitHub</p>
+            <a href="#" class="btn btn-primary">here</a>
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+<!-- Posters -->
+
+<div class="d-flex flex-row justify-content-center">
+    <div class="p-2"><img src="images/Style2.1 Poster.png"></div>
+    <div class="p-2"><img src="images/Gamete 1 Poster.png"></div>
+</div>
+<div class="d-flex flex-row justify-content-center">
+    <div class="p-2"><img src="images/Gamete 2 Poster.png"></div>
+    <div class="p-2"><img src="images/SLAW Poster.png"></div>
+</div>
+
+<!-- footer -->
+    <div class="card text-center">
+        <div class="card-body">
+        <h5 class="card-title">Let's Collaboarate!</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a href="#" class="btn btn-primary">LinkedIn</a>
+        <a href="#" class="btn btn-primary">GitHub</a>
+        </div>
+    </div>
 
 
 </body>
