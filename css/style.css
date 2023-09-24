@@ -1,0 +1,18 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+
+/* Whole page */
+body {
+  /*  background-color: #fff; */
+    color: #161616;
+    font-family: 'Space Grotesk', sans-serif;
+    padding: 1% 5% 1% 5%;
+}
