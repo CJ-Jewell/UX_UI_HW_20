@@ -10,140 +10,164 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- D3 v7 (replaces local d3.js + d3-tip) -->
+  <!-- D3 v7 (replaces broken local d3.js + d3-tip) -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
   <style>
-    :root {
-      --bg:        #f8f9f5;
-      --surface:   #ffffff;
-      --border:    #e4e8e0;
-      --text:      #1a1a1a;
-      --muted:     #6b7280;
-      --green:     #2c5f2e;
-      --accent:    #e63946;
+    /* ─── Violet Sans (matches main portfolio) ─────────────── */
+    @font-face {
+      font-family: "Violet Sans";
+      src: url('fonts/VioletSans-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
-
+    /* ─── Reset (mirrors main site) ───────────────────────── */
     html { scroll-behavior: smooth; }
 
+    body, h1, h2, h3, p, ul, li {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
+
+    p { margin-bottom: 20px; }
+
+    /* ─── Variables ────────────────────────────────────────── */
+    :root {
+      --green:   #507E15;
+      --text:    #161616;
+      --white:   #ffffff;
+      --light:   #f9faf6;
+      --border:  #e4e8dc;
+    }
+
     body {
-      font-family: 'Space Grotesk', sans-serif;
-      background: var(--bg);
       color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--white);
+    }
+
+    /* ─── HEADER / NAV ─────────────────────────────────────── */
+    header {
+      background-color: var(--white);
+      padding: 10px 5%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      font-family: "Violet Sans", sans-serif;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      align-items: center;
       margin: 0;
       padding: 0;
     }
 
-    /* ─── NAV ─────────────────────────────────────────── */
-    .site-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.1rem 5%;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: rgba(248,249,245,0.94);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-    }
+    .nav-list li { margin-left: 10px; }
+    .nav-list li:first-child { margin-left: 0; }
 
-    .site-nav .logo {
-      font-weight: 700;
-      font-size: 1rem;
+    .nav-list a {
+      text-decoration: none;
       color: var(--text);
-      text-decoration: none;
-      letter-spacing: -0.01em;
+      padding: 8px 14px;
+      background-color: var(--white);
+      border-radius: 20px;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      margin-left: 2rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: color 0.15s;
+    .nav-list a:hover,
+    .nav-list a.active {
+      background-color: var(--green);
+      color: var(--white);
     }
-    .nav-links a:hover, .nav-links a.active { color: var(--text); }
 
-    /* ─── HERO ────────────────────────────────────────── */
-    .hero {
-      padding: 5rem 5% 4rem;
+    /* ─── HERO ─────────────────────────────────────────────── */
+    .page-hero {
+      padding: 60px 5% 50px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 2rem;
     }
 
-    .hero h1 {
-      font-size: clamp(2.8rem, 7vw, 5rem);
-      font-weight: 700;
+    .page-hero .eyebrow {
+      font-size: 16px;
+      color: var(--green);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .page-hero h1 {
+      font-family: "Violet Sans", sans-serif;
+      font-size: clamp(52px, 8vw, 96px);
       line-height: 1.0;
-      letter-spacing: -0.03em;
-      margin: 0 0 0.75rem;
+      color: var(--text);
+      margin: 0 0 16px;
     }
 
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--muted);
-      max-width: 420px;
-      line-height: 1.5;
+    .page-hero .tagline {
+      font-size: 22px;
+      font-family: "Violet Sans", sans-serif;
+      color: var(--text);
       margin: 0;
     }
 
-    .hero-badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--green);
-      border: 1.5px solid var(--green);
-      border-radius: 100px;
-      padding: 0.3rem 0.8rem;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-
-    /* ─── SECTIONS ────────────────────────────────────── */
+    /* ─── SECTIONS ─────────────────────────────────────────── */
     .section {
-      padding: 4.5rem 5%;
+      padding: 50px 5%;
       border-bottom: 1px solid var(--border);
     }
 
-    .section-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-bottom: 0.6rem;
+    .topic-header {
+      display: flex;
+      height: 90px;
+      width: 100%;
+      flex-direction: row;
+      margin-bottom: 30px;
     }
 
-    .section-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin: 0 0 0.5rem;
+    .header-text {
+      position: relative;
+      background-image: url("images/Logo Small.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: left center;
+      padding: 10px 10px 10px 0;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+
+    .topic-text {
+      font-size: 32px;
+      font-family: "Violet Sans", sans-serif;
+      color: var(--text);
+      margin: 0;
     }
 
     .section-desc {
-      color: var(--muted);
       font-size: 0.95rem;
+      color: #555;
       max-width: 580px;
       line-height: 1.65;
-      margin: 0 0 2.5rem;
+      margin: 0 0 28px;
     }
+
     .section-desc em { font-style: italic; }
 
-    /* ─── GALLERY ─────────────────────────────────────── */
+    /* ─── IMAGE GALLERY ────────────────────────────────────── */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.875rem;
+      gap: 12px;
     }
 
     .gallery-item {
@@ -158,10 +182,10 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.3s;
+      transition: transform 0.3s ease;
     }
 
-    .gallery-item:hover img { transform: scale(1.03); }
+    .gallery-item:hover img { transform: scale(1.04); }
 
     @media (max-width: 720px) {
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
@@ -170,26 +194,26 @@
       .gallery-grid { grid-template-columns: 1fr; }
     }
 
-    /* ─── D3 VIZ ──────────────────────────────────────── */
+    /* ─── D3 VIZ ───────────────────────────────────────────── */
     .viz-wrapper {
-      background: #eef2ea;
-      border: 1px solid #d4deca;
-      border-radius: 14px;
-      padding: 2rem;
+      background: #f2f5ee;
+      border: 1px solid #d0dac4;
+      border-radius: 12px;
+      padding: 28px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.25rem;
+      gap: 20px;
     }
 
     #phylo-svg {
       border-radius: 10px;
       display: block;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-      cursor: grab;
       width: 100%;
       max-width: 700px;
       height: auto;
+      cursor: grab;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
     }
 
     #phylo-svg:active { cursor: grabbing; }
@@ -197,14 +221,14 @@
     .viz-legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem 1.4rem;
+      gap: 8px 20px;
       justify-content: center;
     }
 
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 7px;
       font-size: 0.78rem;
       color: var(--text);
     }
@@ -214,55 +238,55 @@
       height: 11px;
       border-radius: 50%;
       flex-shrink: 0;
-      border: 1.5px solid rgba(255,255,255,0.6);
+      border: 1.5px solid rgba(255,255,255,0.5);
     }
 
     .viz-hint {
       font-size: 0.75rem;
-      color: var(--muted);
+      color: #777;
       text-align: center;
+      margin: 0;
     }
 
-    /* ─── TOOLTIP ─────────────────────────────────────── */
+    /* ─── TOOLTIP ───────────────────────────────────────────── */
     .d3-tooltip {
       position: fixed;
-      background: rgba(20, 20, 20, 0.88);
+      background: rgba(22, 22, 22, 0.88);
       color: #fff;
-      padding: 6px 12px;
-      border-radius: 7px;
+      padding: 6px 13px;
+      border-radius: 8px;
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.78rem;
       line-height: 1.4;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.12s;
-      max-width: 200px;
-      z-index: 500;
+      transition: opacity 0.1s;
       white-space: nowrap;
+      z-index: 500;
     }
     .d3-tooltip em { font-style: italic; }
 
-    /* ─── PROJECT CARDS ───────────────────────────────── */
+    /* ─── PROJECT CARDS ────────────────────────────────────── */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
+      gap: 20px;
     }
 
-    .card {
-      background: var(--surface);
+    .proj-card {
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: var(--white);
     }
 
-    .card:hover {
+    .proj-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.09);
     }
 
-    .card-img {
+    .proj-card img {
       width: 100%;
       height: 170px;
       object-fit: cover;
@@ -270,53 +294,54 @@
       background: var(--border);
     }
 
-    .card-body { padding: 1.25rem; }
+    .proj-card-body { padding: 20px; }
 
-    .card-tag {
+    .proj-type {
       font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--green);
-      margin-bottom: 0.4rem;
+      margin-bottom: 6px;
     }
 
-    .card-title {
-      font-size: 1.05rem;
+    .proj-title {
+      font-size: 22px;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 600;
-      margin: 0 0 0.5rem;
+      margin: 0 0 10px;
     }
 
-    .card-text {
-      font-size: 0.875rem;
-      color: var(--muted);
+    .proj-desc {
+      font-size: 0.9rem;
+      color: #555;
       line-height: 1.55;
-      margin: 0 0 1rem;
+      margin: 0 0 16px;
     }
 
-    .card-link {
+    .proj-link {
       display: inline-block;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--text);
       text-decoration: none;
+      color: var(--text);
       border: 1.5px solid var(--border);
-      border-radius: 7px;
-      padding: 0.38rem 0.85rem;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      border-radius: 20px;
+      padding: 6px 16px;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
 
-    .card-link:hover {
-      background: var(--text);
-      border-color: var(--text);
-      color: #fff;
+    .proj-link:hover {
+      background-color: var(--green);
+      border-color: var(--green);
+      color: var(--white);
     }
 
-    /* ─── POSTERS ─────────────────────────────────────── */
+    /* ─── POSTERS ───────────────────────────────────────────── */
     .poster-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
+      gap: 14px;
     }
 
     .poster-item {
@@ -334,84 +359,104 @@
       .poster-grid { grid-template-columns: 1fr; }
     }
 
-    /* ─── FOOTER ──────────────────────────────────────── */
-    .site-footer {
-      padding: 4rem 5%;
-      text-align: center;
-    }
-
-    .site-footer h2 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin: 0 0 1.5rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 0.875rem;
-      justify-content: center;
-    }
-
-    .footer-links a {
-      font-size: 0.875rem;
-      font-weight: 600;
+    /* ─── FOOTER (matches main site) ───────────────────────── */
+    footer {
+      background-color: var(--green);
       color: var(--text);
-      text-decoration: none;
-      border: 1.5px solid var(--text);
-      border-radius: 8px;
-      padding: 0.55rem 1.35rem;
-      transition: background 0.15s, color 0.15s;
+      text-align: center;
+      padding: 40px 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 10px;
+      margin: 0 5% 30px;
     }
 
-    .footer-links a:hover {
+    .colab {
+      font-size: 46px;
+      font-family: "Violet Sans", sans-serif;
+      margin-bottom: 14px;
+      color: var(--white);
+    }
+
+    .footlist {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+      padding: 0;
+    }
+
+    .footlist li { margin: 0 15px; }
+
+    .footlist a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      padding: 8px 20px;
+      background: var(--white);
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .footlist a:hover {
       background: var(--text);
-      color: #fff;
+      color: var(--white);
+    }
+
+    footer p:last-child {
+      margin: 0;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
     }
   </style>
 </head>
 
 <body>
 
-  <!-- NAV -->
-  <nav class="site-nav">
-    <a href="https://cj-jewell.github.io/" class="logo">CJ Jewell</a>
-    <div class="nav-links">
-      <a href="https://cj-jewell.github.io/">About</a>
-      <a href="#" class="active">Work</a>
-      <a href="https://www.linkedin.com/in/cj-jewell/">Resume</a>
-      <a href="https://www.linkedin.com/in/cj-jewell/">Contact</a>
-    </div>
-  </nav>
+  <!-- HEADER / NAV (mirrors main site structure) -->
+  <header>
+    <nav>
+      <ul class="nav-list">
+        <li><a href="https://cj-jewell.github.io/#about">About</a></li>
+        <li><a href="#" class="active">Work</a></li>
+        <li><a href="https://www.linkedin.com/in/cj-jewell">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <!-- HERO -->
-  <div class="hero">
-    <div>
-      <div class="hero-badge">Portfolio</div>
-      <h1>Data Viz<br>Gallery</h1>
-      <p>Exploring biology, ecology, and evolution through data.</p>
-    </div>
+  <div class="page-hero">
+    <p class="eyebrow">Data Viz Gallery</p>
+    <h1>Let's have some<br>fun with data.</h1>
+    <p class="tagline">Exploring biology, ecology, and evolution through design.</p>
   </div>
 
   <!-- GALLERY -->
   <section class="section">
-    <div class="section-label">Visual Work</div>
-    <h2 class="section-title">Gallery</h2>
+    <div class="topic-header">
+      <div class="header-text">
+        <span class="topic-text">Gallery</span>
+      </div>
+    </div>
     <p class="section-desc">Data visualizations from ecological research and scientific communication.</p>
     <div class="gallery-grid">
-      <div class="gallery-item"><img src="images/Sleepy.png"              alt="Sleepy"></div>
-      <div class="gallery-item"><img src="images/Fluourescent pollen.png" alt="Fluorescent pollen"></div>
-      <div class="gallery-item"><img src="images/Awake.png"               alt="Awake"></div>
-      <div class="gallery-item"><img src="images/Style Blue.png"          alt="Style Blue"></div>
-      <div class="gallery-item"><img src="images/Flower display.png"      alt="Flower display"></div>
-      <div class="gallery-item"><img src="images/Ecuador View.png"        alt="Ecuador view"></div>
+      <div class="gallery-item"><img src="images/Sleepy.png"               alt="Sleepy"></div>
+      <div class="gallery-item"><img src="images/Fluourescent pollen.png"  alt="Fluorescent pollen"></div>
+      <div class="gallery-item"><img src="images/Awake.png"                alt="Awake"></div>
+      <div class="gallery-item"><img src="images/Style Blue.png"           alt="Style Blue"></div>
+      <div class="gallery-item"><img src="images/Flower display.png"       alt="Flower display"></div>
+      <div class="gallery-item"><img src="images/Ecuador View.png"         alt="Ecuador view"></div>
     </div>
   </section>
 
   <!-- INTERACTIVE VIZ -->
   <section class="section">
-    <div class="section-label">Interactive</div>
-    <h2 class="section-title">Wild Tomato Phylogeny</h2>
+    <div class="topic-header">
+      <div class="header-text">
+        <span class="topic-text">Interactive</span>
+      </div>
+    </div>
     <p class="section-desc">
       A force-directed graph of phylogenetic relationships within
       <em>Solanum</em> sect. <em>Lycopersicon</em> — the wild tomato clade.
@@ -420,41 +465,47 @@
     <div class="viz-wrapper">
       <svg id="phylo-svg" viewBox="0 0 700 480"></svg>
       <div class="viz-legend" id="phylo-legend"></div>
-      <div class="viz-hint">Drag nodes to rearrange &nbsp;·&nbsp; Hover for species names</div>
+      <p class="viz-hint">Drag nodes to rearrange &nbsp;·&nbsp; Hover for species names</p>
     </div>
   </section>
 
   <!-- PROJECT CARDS -->
   <section class="section">
-    <div class="section-label">Builds</div>
-    <h2 class="section-title">Data Projects</h2>
+    <div class="topic-header">
+      <div class="header-text">
+        <span class="topic-text">Featured</span>
+      </div>
+    </div>
     <p class="section-desc">Interactive tools built for ecological and biodiversity data exploration.</p>
     <div class="cards-grid">
-      <div class="card">
-        <img class="card-img" src="images/BioClim.png" alt="BioClim DataTable">
-        <div class="card-body">
-          <div class="card-tag">R Shiny</div>
-          <h3 class="card-title">BioClim Data Explorer</h3>
-          <p class="card-text">Interactive DataTable for browsing and downloading BioClim climate data across the wild tomato clade.</p>
-          <a href="#" class="card-link">View Project →</a>
+      <div class="proj-card">
+        <img src="images/BioClim.png" alt="BioClim DataTable">
+        <div class="proj-card-body">
+          <div class="proj-type">R Shiny</div>
+          <h3 class="proj-title">BioClim Data Explorer</h3>
+          <p class="proj-desc">Interactive DataTable for browsing and downloading BioClim climate data across the wild tomato clade.</p>
+          <a href="#" class="proj-link">View Project →</a>
         </div>
       </div>
-      <div class="card">
-        <img class="card-img" src="images/BioClim.png" alt="Wild Tomato Map">
-        <div class="card-body">
-          <div class="card-tag">HTML · Mapbox</div>
-          <h3 class="card-title">Wild Tomato Distribution Map</h3>
-          <p class="card-text">Interactive map of wild tomato population occurrences across South America, built with Mapbox GL JS.</p>
-          <a href="https://github.com/CJ-Jewell" class="card-link">View on GitHub →</a>
+      <div class="proj-card">
+        <img src="images/BioClim.png" alt="Wild Tomato Map">
+        <div class="proj-card-body">
+          <div class="proj-type">HTML · Mapbox</div>
+          <h3 class="proj-title">Wild Tomato Distribution Map</h3>
+          <p class="proj-desc">Interactive map of wild tomato population occurrences across South America, built with Mapbox GL JS.</p>
+          <a href="https://github.com/CJ-Jewell" class="proj-link">View on GitHub →</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- POSTERS -->
+  <!-- SCIENTIFIC POSTERS -->
   <section class="section">
-    <div class="section-label">Print</div>
-    <h2 class="section-title">Scientific Posters</h2>
+    <div class="topic-header">
+      <div class="header-text">
+        <span class="topic-text">Posters</span>
+      </div>
+    </div>
     <p class="section-desc">Research presented at scientific conferences.</p>
     <div class="poster-grid">
       <div class="poster-item"><img src="images/Style2.1 Poster.png"  alt="Scientific poster 1"></div>
@@ -464,34 +515,35 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <h2>Let's Collaborate</h2>
-    <div class="footer-links">
-      <a href="https://www.linkedin.com/in/cj-jewell">LinkedIn</a>
-      <a href="https://github.com/CJ-Jewell">GitHub</a>
-    </div>
+  <!-- FOOTER (matches main site exactly) -->
+  <footer id="contact">
+    <p class="colab">Let's Collaborate!</p>
+    <ul class="footlist">
+      <li><a href="https://www.linkedin.com/in/cj-jewell">LinkedIn</a></li>
+      <li><a href="https://github.com/CJ-Jewell">GitHub</a></li>
+    </ul>
+    <p>Copyright 2023</p>
   </footer>
 
-  <!-- TOOLTIP (shared) -->
+  <!-- TOOLTIP -->
   <div class="d3-tooltip" id="d3-tip"></div>
 
   <!-- D3 FORCE GRAPH (D3 v7) -->
   <script>
     const W = 700, H = 480;
 
-    /* ── Color palette per group ── */
+    /* ── Clade color palette ── */
     const groups = {
-      1: { label: "Red-fruited clade",        color: "#e63946" },
-      2: { label: "Ancestral / clade nodes",  color: "#9db5a2" },
-      3: { label: "Galapagos group",           color: "#f4a261" },
-      4: { label: "Arcanum group",             color: "#e9c46a" },
-      5: { label: "Peruvianum group",          color: "#2a9d8f" },
-      6: { label: "Hirsutum group",            color: "#52b788" },
-      7: { label: "Outgroup",                  color: "#264653" },
+      1: { label: "Red-fruited clade",         color: "#c1440e" },
+      2: { label: "Ancestral / clade nodes",   color: "#8fa886" },
+      3: { label: "Galapagos group",            color: "#e9a84c" },
+      4: { label: "Arcanum group",              color: "#c9b84a" },
+      5: { label: "Peruvianum group",           color: "#2a7d6b" },
+      6: { label: "Hirsutum group",             color: "#507E15" },
+      7: { label: "Outgroup",                   color: "#2c3e29" },
     };
 
-    /* ── Node data ── */
+    /* ── Nodes ── */
     const nodes = [
       { name: "<em>S. lycopersicoides</em>",               group: 7, r: 8  }, // 0
       { name: "MRCA",                                       group: 2, r: 6  }, // 1
@@ -521,51 +573,36 @@
       { name: "<em>S. pimpinellifolium</em>",              group: 1, r: 8  }, // 25
     ];
 
-    /* ── Link data ── */
+    /* ── Links ── */
     const links = [
-      { source: 24, target: 2  },
-      { source: 25, target: 2  },
-      { source: 3,  target: 5  },
-      { source: 4,  target: 5  },
-      { source: 5,  target: 6  },
-      { source: 2,  target: 6  },
-      { source: 8,  target: 10 },
-      { source: 9,  target: 10 },
-      { source: 7,  target: 11 },
-      { source: 10, target: 11 },
-      { source: 11, target: 12 },
-      { source: 6,  target: 12 },
-      { source: 13, target: 17 },
-      { source: 14, target: 17 },
-      { source: 15, target: 17 },
-      { source: 16, target: 18 },
-      { source: 17, target: 18 },
-      { source: 18, target: 19 },
-      { source: 12, target: 19 },
-      { source: 20, target: 22 },
-      { source: 21, target: 22 },
-      { source: 22, target: 23 },
-      { source: 19, target: 23 },
-      { source: 0,  target: 1  },
+      { source: 24, target: 2  }, { source: 25, target: 2  },
+      { source: 3,  target: 5  }, { source: 4,  target: 5  },
+      { source: 5,  target: 6  }, { source: 2,  target: 6  },
+      { source: 8,  target: 10 }, { source: 9,  target: 10 },
+      { source: 7,  target: 11 }, { source: 10, target: 11 },
+      { source: 11, target: 12 }, { source: 6,  target: 12 },
+      { source: 13, target: 17 }, { source: 14, target: 17 },
+      { source: 15, target: 17 }, { source: 16, target: 18 },
+      { source: 17, target: 18 }, { source: 18, target: 19 },
+      { source: 12, target: 19 }, { source: 20, target: 22 },
+      { source: 21, target: 22 }, { source: 22, target: 23 },
+      { source: 19, target: 23 }, { source: 0,  target: 1  },
       { source: 23, target: 1  },
     ];
 
-    /* ── Build SVG ── */
+    /* ── SVG ── */
     const svg = d3.select("#phylo-svg");
 
-    // Background
     svg.append("rect")
       .attr("width", W).attr("height", H)
-      .attr("fill", "#eef2ea");
+      .attr("fill", "#f2f5ee");
 
-    // Edges
     const edgeG = svg.append("g");
     const edge = edgeG.selectAll("line")
       .data(links).join("line")
-      .attr("stroke", "#b8cdb8")
+      .attr("stroke", "#c2cfb8")
       .attr("stroke-width", 1.8);
 
-    // Nodes
     const nodeG = svg.append("g");
     const node = nodeG.selectAll("circle")
       .data(nodes).join("circle")
@@ -586,21 +623,15 @@
       })
       .on("mousemove", (event) => {
         tip.style.left = (event.clientX + 14) + "px";
-        tip.style.top  = (event.clientY - 34) + "px";
+        tip.style.top  = (event.clientY - 36) + "px";
       })
-      .on("mouseout",  () => {
-        tip.style.opacity = "0";
-      });
+      .on("mouseout", () => { tip.style.opacity = "0"; });
 
     /* ── Force simulation ── */
     const sim = d3.forceSimulation(nodes)
-      .force("link",
-        d3.forceLink(links)
-          .id((d, i) => i)          // match by array index
-          .distance(62)
-      )
-      .force("charge", d3.forceManyBody().strength(-180))
-      .force("center", d3.forceCenter(W / 2, H / 2))
+      .force("link",    d3.forceLink(links).id((d, i) => i).distance(62))
+      .force("charge",  d3.forceManyBody().strength(-180))
+      .force("center",  d3.forceCenter(W / 2, H / 2))
       .force("collide", d3.forceCollide().radius(d => d.r + 3));
 
     sim.on("tick", () => {
@@ -609,13 +640,14 @@
         .attr("y1", d => clamp(d.source.y, d.source.r, H))
         .attr("x2", d => clamp(d.target.x, d.target.r))
         .attr("y2", d => clamp(d.target.y, d.target.r, H));
-
       node
         .attr("cx", d => (d.x = clamp(d.x, d.r)))
         .attr("cy", d => (d.y = clamp(d.y, d.r, H)));
     });
 
-    function clamp(v, pad, max = W) { return Math.max(pad, Math.min(max - pad, v)); }
+    function clamp(v, pad, max = W) {
+      return Math.max(pad, Math.min(max - pad, v));
+    }
 
     /* ── Drag ── */
     node.call(
@@ -624,10 +656,8 @@
           if (!event.active) sim.alphaTarget(0.3).restart();
           d.fx = d.x; d.fy = d.y;
         })
-        .on("drag", (event, d) => {
-          d.fx = event.x; d.fy = event.y;
-        })
-        .on("end", (event, d) => {
+        .on("drag",  (event, d) => { d.fx = event.x; d.fy = event.y; })
+        .on("end",   (event, d) => {
           if (!event.active) sim.alphaTarget(0);
           d.fx = null; d.fy = null;
         })
@@ -635,13 +665,10 @@
 
     /* ── Legend ── */
     const legendEl = document.getElementById("phylo-legend");
-    // Show all groups except the anonymous connector nodes (group 2 has a label though)
     Object.entries(groups).forEach(([k, v]) => {
       const item = document.createElement("div");
       item.className = "legend-item";
-      item.innerHTML =
-        `<span class="legend-dot" style="background:${v.color}"></span>
-         <span>${v.label}</span>`;
+      item.innerHTML = `<span class="legend-dot" style="background:${v.color}"></span><span>${v.label}</span>`;
       legendEl.appendChild(item);
     });
   </script>
