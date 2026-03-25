@@ -1,307 +1,650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Viz Gallery</title>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Viz Gallery — CJ Jewell</title>
 
-    <script src="js/gallery.js"></script>
-    <script type="text/javascript" src="js/d3.js"> </script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <!-- D3 v7 (replaces local d3.js + d3-tip) -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 
-    <!--  Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #f8f9f5;
+      --surface:   #ffffff;
+      --border:    #e4e8e0;
+      --text:      #1a1a1a;
+      --muted:     #6b7280;
+      --green:     #2c5f2e;
+      --accent:    #e63946;
+    }
 
-    <link rel="stylesheet" href="fonts/VioletSans-Regular.ttf">
+    *, *::before, *::after { box-sizing: border-box; }
 
+    html { scroll-behavior: smooth; }
 
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    .site-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 5%;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(248,249,245,0.94);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+
+    .site-nav .logo {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 2rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    .hero {
+      padding: 5rem 5% 4rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin: 0 0 0.75rem;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 420px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .hero-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      border: 1.5px solid var(--green);
+      border-radius: 100px;
+      padding: 0.3rem 0.8rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    /* ─── SECTIONS ────────────────────────────────────── */
+    .section {
+      padding: 4.5rem 5%;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 580px;
+      line-height: 1.65;
+      margin: 0 0 2.5rem;
+    }
+    .section-desc em { font-style: italic; }
+
+    /* ─── GALLERY ─────────────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.875rem;
+    }
+
+    .gallery-item {
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--border);
+      aspect-ratio: 4 / 3;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .gallery-item:hover img { transform: scale(1.03); }
+
+    @media (max-width: 720px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 460px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── D3 VIZ ──────────────────────────────────────── */
+    .viz-wrapper {
+      background: #eef2ea;
+      border: 1px solid #d4deca;
+      border-radius: 14px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    #phylo-svg {
+      border-radius: 10px;
+      display: block;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      cursor: grab;
+      width: 100%;
+      max-width: 700px;
+      height: auto;
+    }
+
+    #phylo-svg:active { cursor: grabbing; }
+
+    .viz-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.4rem;
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      color: var(--text);
+    }
+
+    .legend-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1.5px solid rgba(255,255,255,0.6);
+    }
+
+    .viz-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ─── TOOLTIP ─────────────────────────────────────── */
+    .d3-tooltip {
+      position: fixed;
+      background: rgba(20, 20, 20, 0.88);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s;
+      max-width: 200px;
+      z-index: 500;
+      white-space: nowrap;
+    }
+    .d3-tooltip em { font-style: italic; }
+
+    /* ─── PROJECT CARDS ───────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      display: block;
+      background: var(--border);
+    }
+
+    .card-body { padding: 1.25rem; }
+
+    .card-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+    }
+
+    .card-text {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0 0 1rem;
+    }
+
+    .card-link {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 0.38rem 0.85rem;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .card-link:hover {
+      background: var(--text);
+      border-color: var(--text);
+      color: #fff;
+    }
+
+    /* ─── POSTERS ─────────────────────────────────────── */
+    .poster-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .poster-item {
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--border);
+    }
+
+    .poster-item img {
+      width: 100%;
+      display: block;
+    }
+
+    @media (max-width: 560px) {
+      .poster-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    .site-footer {
+      padding: 4rem 5%;
+      text-align: center;
+    }
+
+    .site-footer h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 0.875rem;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      border: 1.5px solid var(--text);
+      border-radius: 8px;
+      padding: 0.55rem 1.35rem;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .footer-links a:hover {
+      background: var(--text);
+      color: #fff;
+    }
+  </style>
 </head>
 
-<!-----------------         body         -------------------->
-
 <body>
-    <!------- header nav -->
-    <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="https://cj-jewell.github.io/">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Work</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://www.linkedin.com/in/cj-jewell/">Resume</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link">Contact</a>
-        </li>
-      </ul>
 
-      <!-- jumbotron -->
-      <div class="jumbotron">
-        <div class="container text-left text-lg-left">
-          
-          <div class="row">
-            <div class="col-lg-8">
-                <h1 class="display-4">Data Viz Gallery</h1>
-                <p class="lead">Let's have some fun with data.</p>
-            </div>
-            
-            <div class="col-lg-4 align-items-center d-flex">
-              <img src="images/Logo.png" alt="" class="img-fluid">
-            </div>
-          
-        </div>
-      
-        </div>
-      </div>
+  <!-- NAV -->
+  <nav class="site-nav">
+    <a href="https://cj-jewell.github.io/" class="logo">CJ Jewell</a>
+    <div class="nav-links">
+      <a href="https://cj-jewell.github.io/">About</a>
+      <a href="#" class="active">Work</a>
+      <a href="https://www.linkedin.com/in/cj-jewell/">Resume</a>
+      <a href="https://www.linkedin.com/in/cj-jewell/">Contact</a>
+    </div>
+  </nav>
 
-      <!-- Gallery -->
-<div class="row">
-    <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
-      <img
-        src="images/Sleepy.png"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Boat on Calm Water"
-      />
-  
-      <img
-        src="images/Fluourescent pollen.png"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Wintry Mountain Landscape"
-      />
-    </div>
-  
-    <div class="col-lg-4 mb-4 mb-lg-0">
-      <img
-        src="images/Awake.png"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Mountains in the Clouds"
-      />
-  
-      <img
-        src="images/Style Blue.png"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Boat on Calm Water"
-      />
-    </div>
-  
-    <div class="col-lg-4 mb-4 mb-lg-0">
-      <img
-        src="images/Flower display.png"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Waves at Sea"
-      />
-  
-      <img
-        src="images/Ecuador View.png"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Yosemite National Park"
-      />
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-badge">Portfolio</div>
+      <h1>Data Viz<br>Gallery</h1>
+      <p>Exploring biology, ecology, and evolution through data.</p>
     </div>
   </div>
-  <!-- Gallery -->
 
-  <!--D3-->
-  <div id="diag" class="offset-by-three ten columns">
-            
-            
-    <script src = "js/d3-tip.js"></script>
-    <script type="text/javascript">
-        //Width and height for SVG
-
-        var w = 500;
-        var h = 400;
-
-        //Original data
-        var dataset = {
-            nodes: [
-                { name: "<em>S. lycopersicoides</em>" , group: 7 , value: 8 }, //0
-                { name: "MRCA" , group: 2 , value: 5 }, //1
-                { name: "" , group: 2 , value: 5 }, //2
-                { name: "<em>S. cheesmaniae</em>" , group: 3 , value: 8 }, //3
-                { name: "<em>S. galapagense</em>" , group: 3 , value: 8 }, //4
-                { name: "" , group: 2 , value: 5 }, //5
-                { name: "Esculentum group" , group: 2 , value: 5 }, //6
-                { name: "<em>S. arcanum</em>" , group: 4 , value: 8 }, //7
-                { name: "<em>S. chmielewskii</em>" , group: 4 , value: 8 }, //8
-                { name: "<em>S. neorickii</em>" , group: 4 , value: 8 }, //9
-                { name: "" , group: 2 , value: 5 }, //10
-                { name: "Arcanum Group" , group: 2 , value: 5 }, //11
-                { name: "Esculentum and Arcanum group" , group: 2 , value: 5 }, //12
-                { name: "<em>S. corneliomulleri</em>" , group: 5 , value: 8 }, //13
-                { name: "<em>S. hualaysense</em>" , group: 5 , value: 8 }, //14
-                { name: "<em>S. peruvianum</em>" , group: 5 , value: 8 }, //15
-                { name: "<em>S. chilense</em>" , group: 5 , value: 8 }, //16
-                { name: "" , group: 2 , value: 5 }, //17
-                { name: "Peruvianum Group" , group: 2 , value: 5 }, //18
-                { name: "" , group: 2 , value: 5 }, //19
-                { name: "<em>S. habrochaites</em>" , group: 6 , value: 8 }, //20
-                { name: "<em>S. pennellii</em>" , group: 6 , value: 8 }, //21
-                { name: "Hirsutum group" , group: 2 , value: 5 }, //22
-                { name: "<em>Solanum</em> sect. <em>Lycopersicon</em>" , group: 2 , value: 7 }, //23
-                { name: "<em>S. lycopersicum</em>" , group: 1 , value: 8 }, //24
-                { name: "<em>S. pimpinellifolium</em>" , group: 1 , value: 8 }, //25
-
-            ],
-            edges: [
-                { source: 24, target: 2 }, //lyc to lyc-pim
-                { source: 25, target: 2 }, //pim to lyc-pim
-                { source: 3, target: 5 }, //che to che-gal
-                { source: 4, target: 5 }, //gal to che-gal
-                { source: 5, target: 6 }, //che-gal to red
-                { source: 2, target: 6 }, //lyc-pim to red
-                { source: 8, target: 10 }, //chm to chm-neo 
-                { source: 9, target: 10 }, //neo to chm-neo
-                { source: 7, target: 11 }, //arc to arc group
-                { source: 10, target: 11 }, //chm-neo to arc group
-                { source: 11, target: 12 }, //arc group to upper half
-                { source: 6, target: 12 }, //red fruited to upper half
-                { source: 13, target: 17 }, //cor to co-hu-per
-                { source: 14, target: 17 }, //hua to co-hu-per
-                { source: 15, target: 17 }, //per to co-hu-per
-                { source: 16, target: 18 }, //chil to mountain
-                { source: 17, target: 18 }, //co-hu-per to mountain
-                { source: 18, target: 19 }, //mountain to red+mount
-                { source: 12, target: 19 }, //red to red+mount
-                { source: 20, target: 22 }, //hab to pen-hab
-                { source: 21, target: 22 }, //pen to pen-hab
-                { source: 22, target: 23 }, //pen-hab to Solanum
-                { source: 19, target: 23 }, //red+mount to Solanum
-                { source: 0, target: 1 }, //lyps to MRCA
-                { source: 23, target: 1 }, //Solanum to MRCA
-            ]
-        };
-
-        //Initialize a default force layout, using the nodes and edges in dataset
-        var force = d3.layout.force()
-                             .nodes(dataset.nodes)
-                             .links(dataset.edges)
-                             .size([w, h])
-                             .linkDistance([50])
-                             .charge([-100])
-                             .start();
-
-        var colors = d3.scale.category20();
-
-        //Create SVG element, append SVG to body of the html page. Assign this SVG as an object to svg
-        var svg = d3.select("#diag")
-                    .append("svg")
-                    .attr("width", w)
-                    .attr("height", h);
-        
-        svg.append("rect")
-                .attr("width", w)
-                .attr("height", h)
-                .attr("fill", "AliceBlue");
-        
-        //Create edges as lines
-        var edges = svg.selectAll("line")
-            .data(dataset.edges)
-            .enter()
-            .append("line")
-            .style("stroke", "#ccc")
-            .style("stroke-width", 1);
-        
-        
-        //Set up tooltip
-        var tip = d3.tip()
-            .attr('class', 'd3-tip')
-            .offset([-2, 0])
-            .html(function (d) {
-                return d.name + "</span>";
-        })
-        svg.call(tip);
-        
-        
-        //Create nodes as circles
-        var nodes = svg.selectAll("circle")
-            .data(dataset.nodes)
-            .enter()
-            .append("circle")
-            .attr("r", function(d) { return d.value ; })
-            .style("fill", function(d, i) {
-                return colors(d.group);
-            })
-            .call(force.drag)
-            .on("mouseover", tip.show)
-            .on("mouseout", tip.hide);
-
-        
-        //Every time the simulation "ticks", this will be called
-        force.on("tick", function() {
-
-            edges.attr("x1", function(d) { return d.source.x; })
-                 .attr("y1", function(d) { return d.source.y; })
-                 .attr("x2", function(d) { return d.target.x; })
-                 .attr("y2", function(d) { return d.target.y; });
-        
-            nodes.attr("cx", function(d) { return d.x; })
-                 .attr("cy", function(d) { return d.y; });
-
-        });
-
-    </script>
-    
-    <svg width="500" height="400"><rect width="500" height="400" fill="AliceBlue"></rect><line x1="277.29444480434944" y1="79.0867139724848" x2="323.6027016948434" y2="98.7597336602662" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="365.87952207839834" y1="127.45956057152009" x2="323.6027016948434" y2="98.7597336602662" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="348.4347103856082" y1="229.5824613162942" x2="357.5674386968331" y2="179.36415347142474" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="385.8730207652812" y1="222.36218819836435" x2="357.5674386968331" y2="179.36415347142474" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="357.5674386968331" y1="179.36415347142474" x2="316.4250474083165" y2="148.78667460589693" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="323.6027016948434" y1="98.7597336602662" x2="316.4250474083165" y2="148.78667460589693" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="268.46640860956785" y1="317.02780028924616" x2="271.2754637051935" y2="265.53912931345593" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="311.75381288811366" y1="299.4369393150206" x2="271.2754637051935" y2="265.53912931345593" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="314.9571456839929" y1="252.55268122888108" x2="280.6831994969153" y2="214.51193414252484" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="271.2754637051935" y1="265.53912931345593" x2="280.6831994969153" y2="214.51193414252484" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="280.6831994969153" y1="214.51193414252484" x2="269.498031863199" y2="164.62161475430804" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="316.4250474083165" y1="148.78667460589693" x2="269.498031863199" y2="164.62161475430804" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="124.42963288355202" y1="168.89589496213136" x2="150.86179310954236" y2="125.04450761304606" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="199.66525797658383" y1="105.44788902441053" x2="150.86179310954236" y2="125.04450761304606" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="176.58765954924385" y1="79.82198147407554" x2="150.86179310954236" y2="125.04450761304606" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="227.16539460417778" y1="135.9191893179531" x2="183.05821412769794" y2="164.50002329683346" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="150.86179310954236" y1="125.04450761304606" x2="183.05821412769794" y2="164.50002329683346" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="183.05821412769794" y1="164.50002329683346" x2="226.30070981930098" y2="190.98506972035625" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="269.498031863199" y1="164.62161475430804" x2="226.30070981930098" y2="190.98506972035625" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="209.922896317074" y1="336.79071241101894" x2="215.90982144799125" y2="287.7041362192322" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="179.84020592037447" y1="249.71553926369114" x2="215.90982144799125" y2="287.7041362192322" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="215.90982144799125" y1="287.7041362192322" x2="205.7606894136961" y2="237.4693429494551" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="226.30070981930098" y1="190.98506972035625" x2="205.7606894136961" y2="237.4693429494551" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="124.68796675292748" y1="236.43076049326868" x2="162.19731333708086" y2="272.1964396244361" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><line x1="205.7606894136961" y1="237.4693429494551" x2="162.19731333708086" y2="272.1964396244361" style="stroke: rgb(204, 204, 204); stroke-width: 1;"></line><circle r="8" style="fill: rgb(31, 119, 180);" cx="124.68796675292748" cy="236.43076049326868"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="162.19731333708086" cy="272.1964396244361"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="323.6027016948434" cy="98.7597336602662"></circle><circle r="8" style="fill: rgb(255, 127, 14);" cx="348.4347103856082" cy="229.5824613162942"></circle><circle r="8" style="fill: rgb(255, 127, 14);" cx="385.8730207652812" cy="222.36218819836435"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="357.5674386968331" cy="179.36415347142474"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="316.4250474083165" cy="148.78667460589693"></circle><circle r="8" style="fill: rgb(255, 187, 120);" cx="314.9571456839929" cy="252.55268122888108"></circle><circle r="8" style="fill: rgb(255, 187, 120);" cx="268.46640860956785" cy="317.02780028924616"></circle><circle r="8" style="fill: rgb(255, 187, 120);" cx="311.75381288811366" cy="299.4369393150206"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="271.2754637051935" cy="265.53912931345593"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="280.6831994969153" cy="214.51193414252484"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="269.498031863199" cy="164.62161475430804"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="124.42963288355202" cy="168.89589496213136"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="199.66525797658383" cy="105.44788902441053"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="176.58765954924385" cy="79.82198147407554"></circle><circle r="8" style="fill: rgb(44, 160, 44);" cx="227.16539460417778" cy="135.9191893179531"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="150.86179310954236" cy="125.04450761304606"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="183.05821412769794" cy="164.50002329683346"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="226.30070981930098" cy="190.98506972035625"></circle><circle r="8" style="fill: rgb(152, 223, 138);" cx="209.922896317074" cy="336.79071241101894"></circle><circle r="8" style="fill: rgb(152, 223, 138);" cx="179.84020592037447" cy="249.71553926369114"></circle><circle r="5" style="fill: rgb(174, 199, 232);" cx="215.90982144799125" cy="287.7041362192322"></circle><circle r="7" style="fill: rgb(174, 199, 232);" cx="205.7606894136961" cy="237.4693429494551"></circle><circle r="8" style="fill: rgb(214, 39, 40);" cx="277.29444480434944" cy="79.0867139724848"></circle><circle r="8" style="fill: rgb(214, 39, 40);" cx="365.87952207839834" cy="127.45956057152009"></circle></svg>
+  <!-- GALLERY -->
+  <section class="section">
+    <div class="section-label">Visual Work</div>
+    <h2 class="section-title">Gallery</h2>
+    <p class="section-desc">Data visualizations from ecological research and scientific communication.</p>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="images/Sleepy.png"              alt="Sleepy"></div>
+      <div class="gallery-item"><img src="images/Fluourescent pollen.png" alt="Fluorescent pollen"></div>
+      <div class="gallery-item"><img src="images/Awake.png"               alt="Awake"></div>
+      <div class="gallery-item"><img src="images/Style Blue.png"          alt="Style Blue"></div>
+      <div class="gallery-item"><img src="images/Flower display.png"      alt="Flower display"></div>
+      <div class="gallery-item"><img src="images/Ecuador View.png"        alt="Ecuador view"></div>
     </div>
+  </section>
 
-    <div class="d3-tip" style="position: absolute; opacity: 0;"></div>
-  <!-- Data -->
-  <div class="row">
-    <div class="col-sm-6 mb-3 mb-sm-0">
+  <!-- INTERACTIVE VIZ -->
+  <section class="section">
+    <div class="section-label">Interactive</div>
+    <h2 class="section-title">Wild Tomato Phylogeny</h2>
+    <p class="section-desc">
+      A force-directed graph of phylogenetic relationships within
+      <em>Solanum</em> sect. <em>Lycopersicon</em> — the wild tomato clade.
+      Nodes represent species and major clades; edges show evolutionary relatedness.
+    </p>
+    <div class="viz-wrapper">
+      <svg id="phylo-svg" viewBox="0 0 700 480"></svg>
+      <div class="viz-legend" id="phylo-legend"></div>
+      <div class="viz-hint">Drag nodes to rearrange &nbsp;·&nbsp; Hover for species names</div>
+    </div>
+  </section>
+
+  <!-- PROJECT CARDS -->
+  <section class="section">
+    <div class="section-label">Builds</div>
+    <h2 class="section-title">Data Projects</h2>
+    <p class="section-desc">Interactive tools built for ecological and biodiversity data exploration.</p>
+    <div class="cards-grid">
       <div class="card">
-        <img src="images/BioClim.png" class="card-img-top" alt="...">
+        <img class="card-img" src="images/BioClim.png" alt="BioClim DataTable">
         <div class="card-body">
-            <h6>RSHINY</h6>
-          <h5 class="card-title">BioClim Data</h5>
-          <p class="card-text">Interactive DataTable to download BioClim data for the wild tomato clade</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <div class="card-tag">R Shiny</div>
+          <h3 class="card-title">BioClim Data Explorer</h3>
+          <p class="card-text">Interactive DataTable for browsing and downloading BioClim climate data across the wild tomato clade.</p>
+          <a href="#" class="card-link">View Project →</a>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="images/BioClim.png" alt="Wild Tomato Map">
+        <div class="card-body">
+          <div class="card-tag">HTML · Mapbox</div>
+          <h3 class="card-title">Wild Tomato Distribution Map</h3>
+          <p class="card-text">Interactive map of wild tomato population occurrences across South America, built with Mapbox GL JS.</p>
+          <a href="https://github.com/CJ-Jewell" class="card-link">View on GitHub →</a>
         </div>
       </div>
     </div>
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        <div class="card">
-          <img src="images/BioClim.png" class="card-img-top" alt="...">
-          <div class="card-body">
-              <h6>HTML</h6>
-            <h5 class="card-title">Map of Wild Tomatoes</h5>
-            <p class="card-text">Interactive map of wild tomato populations using Mapbox. See code on GitHub</p>
-            <a href="#" class="btn btn-primary">here</a>
-          </div>
-        </div>
-      </div>
-  </div>
+  </section>
 
-
-<!-- Posters -->
-
-<div class="d-flex flex-row justify-content-center">
-    <div class="p-2"><img src="images/Style2.1 Poster.png"></div>
-    <div class="p-2"><img src="images/Gamete 1 Poster.png"></div>
-</div>
-<div class="d-flex flex-row justify-content-center">
-    <div class="p-2"><img src="images/Gamete 2 Poster.png"></div>
-    <div class="p-2"><img src="images/SLAW Poster.png"></div>
-</div>
-
-<!-- footer -->
-    <div class="card text-center">
-        <div class="card-body">
-        <h5 class="card-title">Let's Collaboarate!</h5>
-        <a href="https://www.linkedin.com/in/cj-jewell" class="btn btn-primary">LinkedIn</a>
-        <a href="https://github.com/CJ-Jewell" class="btn btn-primary">GitHub</a>
-        </div>
+  <!-- POSTERS -->
+  <section class="section">
+    <div class="section-label">Print</div>
+    <h2 class="section-title">Scientific Posters</h2>
+    <p class="section-desc">Research presented at scientific conferences.</p>
+    <div class="poster-grid">
+      <div class="poster-item"><img src="images/Style2.1 Poster.png"  alt="Scientific poster 1"></div>
+      <div class="poster-item"><img src="images/Gamete 1 Poster.png"  alt="Scientific poster 2"></div>
+      <div class="poster-item"><img src="images/Gamete 2 Poster.png"  alt="Scientific poster 3"></div>
+      <div class="poster-item"><img src="images/SLAW Poster.png"      alt="Scientific poster 4"></div>
     </div>
+  </section>
 
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <h2>Let's Collaborate</h2>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/cj-jewell">LinkedIn</a>
+      <a href="https://github.com/CJ-Jewell">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- TOOLTIP (shared) -->
+  <div class="d3-tooltip" id="d3-tip"></div>
+
+  <!-- D3 FORCE GRAPH (D3 v7) -->
+  <script>
+    const W = 700, H = 480;
+
+    /* ── Color palette per group ── */
+    const groups = {
+      1: { label: "Red-fruited clade",        color: "#e63946" },
+      2: { label: "Ancestral / clade nodes",  color: "#9db5a2" },
+      3: { label: "Galapagos group",           color: "#f4a261" },
+      4: { label: "Arcanum group",             color: "#e9c46a" },
+      5: { label: "Peruvianum group",          color: "#2a9d8f" },
+      6: { label: "Hirsutum group",            color: "#52b788" },
+      7: { label: "Outgroup",                  color: "#264653" },
+    };
+
+    /* ── Node data ── */
+    const nodes = [
+      { name: "<em>S. lycopersicoides</em>",               group: 7, r: 8  }, // 0
+      { name: "MRCA",                                       group: 2, r: 6  }, // 1
+      { name: "",                                           group: 2, r: 5  }, // 2
+      { name: "<em>S. cheesmaniae</em>",                   group: 3, r: 8  }, // 3
+      { name: "<em>S. galapagense</em>",                   group: 3, r: 8  }, // 4
+      { name: "",                                           group: 2, r: 5  }, // 5
+      { name: "Esculentum group",                          group: 2, r: 6  }, // 6
+      { name: "<em>S. arcanum</em>",                       group: 4, r: 8  }, // 7
+      { name: "<em>S. chmielewskii</em>",                  group: 4, r: 8  }, // 8
+      { name: "<em>S. neorickii</em>",                     group: 4, r: 8  }, // 9
+      { name: "",                                           group: 2, r: 5  }, // 10
+      { name: "Arcanum group",                             group: 2, r: 6  }, // 11
+      { name: "Esculentum + Arcanum",                      group: 2, r: 6  }, // 12
+      { name: "<em>S. corneliomulleri</em>",               group: 5, r: 8  }, // 13
+      { name: "<em>S. hualaysense</em>",                   group: 5, r: 8  }, // 14
+      { name: "<em>S. peruvianum</em>",                    group: 5, r: 8  }, // 15
+      { name: "<em>S. chilense</em>",                      group: 5, r: 8  }, // 16
+      { name: "",                                           group: 2, r: 5  }, // 17
+      { name: "Peruvianum group",                          group: 2, r: 6  }, // 18
+      { name: "",                                           group: 2, r: 5  }, // 19
+      { name: "<em>S. habrochaites</em>",                  group: 6, r: 8  }, // 20
+      { name: "<em>S. pennellii</em>",                     group: 6, r: 8  }, // 21
+      { name: "Hirsutum group",                            group: 2, r: 6  }, // 22
+      { name: "<em>Solanum</em> sect. <em>Lycopersicon</em>", group: 2, r: 7 }, // 23
+      { name: "<em>S. lycopersicum</em>",                  group: 1, r: 8  }, // 24
+      { name: "<em>S. pimpinellifolium</em>",              group: 1, r: 8  }, // 25
+    ];
+
+    /* ── Link data ── */
+    const links = [
+      { source: 24, target: 2  },
+      { source: 25, target: 2  },
+      { source: 3,  target: 5  },
+      { source: 4,  target: 5  },
+      { source: 5,  target: 6  },
+      { source: 2,  target: 6  },
+      { source: 8,  target: 10 },
+      { source: 9,  target: 10 },
+      { source: 7,  target: 11 },
+      { source: 10, target: 11 },
+      { source: 11, target: 12 },
+      { source: 6,  target: 12 },
+      { source: 13, target: 17 },
+      { source: 14, target: 17 },
+      { source: 15, target: 17 },
+      { source: 16, target: 18 },
+      { source: 17, target: 18 },
+      { source: 18, target: 19 },
+      { source: 12, target: 19 },
+      { source: 20, target: 22 },
+      { source: 21, target: 22 },
+      { source: 22, target: 23 },
+      { source: 19, target: 23 },
+      { source: 0,  target: 1  },
+      { source: 23, target: 1  },
+    ];
+
+    /* ── Build SVG ── */
+    const svg = d3.select("#phylo-svg");
+
+    // Background
+    svg.append("rect")
+      .attr("width", W).attr("height", H)
+      .attr("fill", "#eef2ea");
+
+    // Edges
+    const edgeG = svg.append("g");
+    const edge = edgeG.selectAll("line")
+      .data(links).join("line")
+      .attr("stroke", "#b8cdb8")
+      .attr("stroke-width", 1.8);
+
+    // Nodes
+    const nodeG = svg.append("g");
+    const node = nodeG.selectAll("circle")
+      .data(nodes).join("circle")
+      .attr("r",      d => d.r)
+      .attr("fill",   d => groups[d.group].color)
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5)
+      .style("cursor", "grab");
+
+    /* ── Tooltip ── */
+    const tip = document.getElementById("d3-tip");
+
+    node
+      .on("mouseover", (event, d) => {
+        if (!d.name) return;
+        tip.innerHTML = d.name;
+        tip.style.opacity = "1";
+      })
+      .on("mousemove", (event) => {
+        tip.style.left = (event.clientX + 14) + "px";
+        tip.style.top  = (event.clientY - 34) + "px";
+      })
+      .on("mouseout",  () => {
+        tip.style.opacity = "0";
+      });
+
+    /* ── Force simulation ── */
+    const sim = d3.forceSimulation(nodes)
+      .force("link",
+        d3.forceLink(links)
+          .id((d, i) => i)          // match by array index
+          .distance(62)
+      )
+      .force("charge", d3.forceManyBody().strength(-180))
+      .force("center", d3.forceCenter(W / 2, H / 2))
+      .force("collide", d3.forceCollide().radius(d => d.r + 3));
+
+    sim.on("tick", () => {
+      edge
+        .attr("x1", d => clamp(d.source.x, d.source.r))
+        .attr("y1", d => clamp(d.source.y, d.source.r, H))
+        .attr("x2", d => clamp(d.target.x, d.target.r))
+        .attr("y2", d => clamp(d.target.y, d.target.r, H));
+
+      node
+        .attr("cx", d => (d.x = clamp(d.x, d.r)))
+        .attr("cy", d => (d.y = clamp(d.y, d.r, H)));
+    });
+
+    function clamp(v, pad, max = W) { return Math.max(pad, Math.min(max - pad, v)); }
+
+    /* ── Drag ── */
+    node.call(
+      d3.drag()
+        .on("start", (event, d) => {
+          if (!event.active) sim.alphaTarget(0.3).restart();
+          d.fx = d.x; d.fy = d.y;
+        })
+        .on("drag", (event, d) => {
+          d.fx = event.x; d.fy = event.y;
+        })
+        .on("end", (event, d) => {
+          if (!event.active) sim.alphaTarget(0);
+          d.fx = null; d.fy = null;
+        })
+    );
+
+    /* ── Legend ── */
+    const legendEl = document.getElementById("phylo-legend");
+    // Show all groups except the anonymous connector nodes (group 2 has a label though)
+    Object.entries(groups).forEach(([k, v]) => {
+      const item = document.createElement("div");
+      item.className = "legend-item";
+      item.innerHTML =
+        `<span class="legend-dot" style="background:${v.color}"></span>
+         <span>${v.label}</span>`;
+      legendEl.appendChild(item);
+    });
+  </script>
 
 </body>
-
 </html>
